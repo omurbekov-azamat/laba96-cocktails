@@ -15,13 +15,13 @@ const run = async () => {
     }
 
     await User.create({
-        username: 'user',
+        email: 'user@gmail.com',
         password: '123',
         displayName: 'user',
         avatar: null,
         token: crypto.randomUUID(),
     }, {
-        username: 'admin',
+        email: 'admin@gmail.com',
         password: '123',
         displayName: 'admin',
         avatar: null,
