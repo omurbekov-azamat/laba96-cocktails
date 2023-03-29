@@ -30,9 +30,12 @@ const CocktailSchema = new Schema<ICocktail>({
         default: false,
     },
     ingredients: {
-        type: [String],
+        type: [{
+            name: String,
+            amount: String,
+        }],
         required: true,
-    },
+    }
 });
 
 const Cocktail = model<ICocktail>('Cocktail', CocktailSchema);
