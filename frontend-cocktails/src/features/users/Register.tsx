@@ -8,6 +8,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {LoadingButton} from "@mui/lab";
 import FileInput from '../../components/UI/FileInput/FileInput';
 import {RegisterMutation} from '../../types';
+import LoginWithGoogle from '../../components/GoogleLogin/LoginWithGoogle';
 
 const Register = () => {
     const dispatch = useAppDispatch();
@@ -64,6 +65,7 @@ const Register = () => {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
+                <LoginWithGoogle/>
                 <Box component="form" onSubmit={submitFormHandler} sx={{mt: 3}}>
                     <Grid container spacing={2} textAlign='center'>
                         <Grid item xs={12}>

@@ -4,8 +4,11 @@ import {promises as fs} from "fs";
 import {Error} from "mongoose";
 import crypto from "crypto";
 import User from '../modules/User';
+import {OAuth2Client} from 'google-auth-library';
+import config from '../config';
 
 const usersRouter = express.Router();
+const client = new OAuth2Client(config.google.clientId);
 
 usersRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
     try {
@@ -49,6 +52,48 @@ usersRouter.post('/sessions', async (req, res) => {
         return res.status(400);
     }
 });
+
+usersRouter.post('/google', async (req, res, next) => {
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: req.body.credential,
+            audience: config.google.clientId,
+        });
+        const payload = ticket.getPayload();
+
+        if (!payload) {
+            return res.status(400).send({error: 'Wrong Google token!'});
+        }
+
+        const email = payload['email'];
+        const googleId = payload['sub'];
+        const displayName = payload['name'];
+        const avatar = payload['picture'];
+
+        if (!email) {
+            return res.status(400).send({error: 'Not enough user data'});
+        }
+
+        let user = await User.findOne({googleId});
+
+        if (!user) {
+            user = new User({
+                email,
+                password: crypto.randomUUID(),
+                displayName,
+                googleId,
+                avatar,
+            });
+        }
+
+        user.generateToken();
+        await user.save();
+        return res.send({message: 'Login with Google successful!', user});
+    } catch (e) {
+        return next(e);
+    }
+});
+
 
 usersRouter.delete('/sessions', async (req, res, next) => {
    try {

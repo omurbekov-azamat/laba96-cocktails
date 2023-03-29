@@ -7,6 +7,7 @@ import {Avatar, Box, Container, Grid, Link, TextField, Typography} from '@mui/ma
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import {LoadingButton} from '@mui/lab';
 import Alert from '@mui/material/Alert'
+import LoginWithGoogle from '../../components/GoogleLogin/LoginWithGoogle';
 import {LoginMutation} from '../../types';
 
 const Login = () => {
@@ -45,6 +46,7 @@ const Login = () => {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
+                <LoginWithGoogle/>
                 {error && (
                     <Alert severity="error" sx={{mt: 3, width: '100%'}}>
                         {error.error}
