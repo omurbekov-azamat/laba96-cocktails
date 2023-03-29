@@ -52,3 +52,8 @@ export interface CocktailApi {
     name: string;
     _id: string;
 }
+
+export interface CocktailId extends CocktailApi{
+    recipe: string;
+    ingredients: IngredientApi[];
+}

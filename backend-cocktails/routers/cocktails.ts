@@ -77,7 +77,8 @@ cocktailsRouter.get('/:id', async (req, res, next) => {
             if (!cocktail) {
                 return res.status(404).send({error: 'Cocktail is not found'});
             }
-            return res.send(cocktail);
+            const getCocktail = cocktail[0];
+            return res.send(getCocktail);
         }
 
         const user = await User.findOne({token});

@@ -4,12 +4,15 @@ import Home from './containers/Home';
 import Register from './features/users/Register';
 import Login from './features/users/Login';
 import Cocktails from './containers/Cocktails';
+import Cocktail from './containers/Cocktail';
 
 function App() {
     return (
         <Routes>
             <Route path='/' element={<Home/>}>
                 <Route path='/' element={<Cocktails/>}/>
+                <Route path='/cocktails' element={<Cocktails/>}/>
+                <Route path='/cocktails/:id' element={<Cocktail/>}/>
                 <Route path='/register' element={<Register/>}/>
                 <Route path='/login' element={<Login/>}/>
             </Route>
