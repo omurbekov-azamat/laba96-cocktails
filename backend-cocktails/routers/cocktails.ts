@@ -34,6 +34,30 @@ cocktailsRouter.post('/', auth, imagesUpload.single('image'), async (req, res, n
 
 cocktailsRouter.get('/', async (req, res, next) => {
     const token = req.get('Authorization');
+    if (req.query.author) {
+        try {
+            if (!token) {
+                return res.status(401).send({error: 'No token'});
+            }
+
+            const user = await User.findOne({token});
+
+            if (!user) {
+                return res.status(401).send({error: 'Wrong token!'});
+            }
+
+            const cocktails = await Cocktail.find({user}).select(['image', 'name', 'isPublished']);
+
+            if (!cocktails) {
+                return res.status(404).send({error: 'Cocktails are not found'})
+            }
+
+            return res.send(cocktails);
+        } catch (e) {
+            return next(e);
+        }
+    }
+
     try {
         if (!token) {
             const cocktails = await Cocktail.find({isPublished: true}).select(['image', 'name', 'isPublished']);
@@ -50,7 +74,7 @@ cocktailsRouter.get('/', async (req, res, next) => {
         }
 
         if (user.role === 'user') {
-            const cocktails = await Cocktail.find({user}).select(['image', 'name', 'isPublished']);
+            const cocktails = await Cocktail.find({isPublished: true}).select(['image', 'name', 'isPublished']);
             if (!cocktails) {
                 return res.status(404).send({error: 'Cocktails are not found'});
             }
@@ -87,11 +111,12 @@ cocktailsRouter.get('/:id', async (req, res, next) => {
         }
 
         if (user.role === 'user') {
-            const cocktail = await Cocktail.findById(req.params.id);
+            const cocktail = await Cocktail.find({isPublished: true, _id: req.params.id});
             if (!cocktail) {
                 return res.status(404).send({error: 'Cocktail is not found'});
             }
-            return res.send(cocktail);
+            const getCocktail = cocktail[0];
+            return res.send(getCocktail);
         }
 
         if (user.role === 'admin') {
