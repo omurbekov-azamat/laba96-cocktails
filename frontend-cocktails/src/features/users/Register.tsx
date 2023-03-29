@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {Link as RouterLink} from 'react-router-dom';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {selectRegisterError, selectRegisterLoading} from './usersSlice';
-import {register} from './userThunks';
+import {register} from './usersThunks';
 import {useAppDispatch, useAppSelector} from '../../app/hook';
 import {Avatar, Box, Container, Grid, Link, TextField, Typography} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -14,6 +14,7 @@ const Register = () => {
     const dispatch = useAppDispatch();
     const error = useAppSelector(selectRegisterError);
     const loading = useAppSelector(selectRegisterLoading);
+    const navigate = useNavigate();
 
     const [state, setState] = useState<RegisterMutation>({
         email: '',
@@ -38,6 +39,7 @@ const Register = () => {
     const submitFormHandler = async (event: React.FormEvent) => {
         event.preventDefault();
         await dispatch(register(state)).unwrap();
+        await navigate('/');
     };
 
     const getFieldError = (fieldName: string) => {
@@ -47,7 +49,6 @@ const Register = () => {
             return undefined;
         }
     };
-
 
     return (
         <Container component="main" maxWidth="xs">

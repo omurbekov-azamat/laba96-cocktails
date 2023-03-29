@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import {logout} from '../../../features/users/userThunks';
+import {logout} from '../../../features/users/usersThunks';
 import {useAppDispatch, useAppSelector} from '../../../app/hook';
 import {selectLogoutLoading} from '../../../features/users/usersSlice';
 import {apiURL} from '../../../constants';
 import {Avatar, Button, Grid, Menu, MenuItem} from '@mui/material';
 import {User} from '../../../types';
+import {useNavigate} from 'react-router-dom';
 
 interface Props {
     user: User;
@@ -13,6 +14,7 @@ interface Props {
 const UserMenu: React.FC<Props> = ({user}) => {
     const dispatch = useAppDispatch();
     const loading = useAppSelector(selectLogoutLoading);
+    const navigate = useNavigate();
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -25,7 +27,12 @@ const UserMenu: React.FC<Props> = ({user}) => {
 
     const handleLogout = async () => {
         await dispatch(logout());
+        await navigate('/');
     };
+
+    const handleMyCocktails = async () => {
+        await navigate('/my-cocktails');
+    }
 
     return (
         <>
@@ -48,6 +55,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
+                <MenuItem onClick={handleMyCocktails} disabled={loading}>My cocktails</MenuItem>
                 <MenuItem onClick={handleLogout} disabled={loading}>Logout</MenuItem>
             </Menu>
         </>

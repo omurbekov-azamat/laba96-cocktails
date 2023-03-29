@@ -1,6 +1,6 @@
 import React from 'react';
 import {useNavigate} from "react-router-dom";
-import {googleLogin} from '../../features/users/userThunks';
+import {googleLogin} from '../../features/users/usersThunks';
 import {GoogleLogin} from "@react-oauth/google";
 import {useAppDispatch} from "../../app/hook";
 import {Box} from "@mui/material";

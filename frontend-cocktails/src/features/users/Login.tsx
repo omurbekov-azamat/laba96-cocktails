@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {Link as RouterLink} from 'react-router-dom';
-import {login} from './userThunks';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
+import {login} from './usersThunks';
 import {selectLoginError, selectLoginLoading} from './usersSlice';
 import {useAppDispatch, useAppSelector} from '../../app/hook';
 import {Avatar, Box, Container, Grid, Link, TextField, Typography} from '@mui/material';
@@ -14,6 +14,7 @@ const Login = () => {
     const dispatch = useAppDispatch();
     const error = useAppSelector(selectLoginError);
     const loading = useAppSelector(selectLoginLoading);
+    const navigate = useNavigate();
 
     const [state, setState] = useState<LoginMutation>({
         email: '',
@@ -28,6 +29,7 @@ const Login = () => {
     const submitFormHandler = async (event: React.FormEvent) => {
         event.preventDefault();
         await dispatch(login(state)).unwrap();
+        await navigate('/');
     };
 
     return (

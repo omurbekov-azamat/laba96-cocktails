@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../../app/store';
-import {googleLogin, login, logout, register} from './userThunks';
+import {googleLogin, login, logout, register} from './usersThunks';
 import {GlobalError, User, ValidationError} from '../../types';
 
 

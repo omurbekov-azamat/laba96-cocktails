@@ -40,3 +40,18 @@ export interface ValidationError {
     _name: string;
 }
 
+export interface IngredientApi {
+    name: string;
+    amount: string;
+    _id: string;
+}
+
+export interface CocktailApi {
+    _id: string;
+    user: string;
+    name: string;
+    image: string;
+    recipe: string;
+    isPublished: boolean;
+    ingredients: IngredientApi[];
+}
