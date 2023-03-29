@@ -1,12 +1,14 @@
 import React, {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from '../app/hook';
-import {selectCocktailsFetching} from '../features/cocktails/cocktailsSlice';
+import {selectCocktails, selectCocktailsFetching} from '../features/cocktails/cocktailsSlice';
 import {fetchCocktails} from '../features/cocktails/cocktailsThunks';
 import {Typography} from '@mui/material';
 import Spinner from '../components/UI/Spinner/Spinner';
+import CocktailItems from '../features/cocktails/components/CocktailItems';
 
 const Cocktails = () => {
     const dispatch = useAppDispatch();
+    const cocktails = useAppSelector(selectCocktails);
     const loading = useAppSelector(selectCocktailsFetching);
 
     useEffect(() => {
@@ -19,6 +21,7 @@ const Cocktails = () => {
                 Cocktails
             </Typography>
             {loading && <Spinner/>}
+            <CocktailItems items={cocktails}/>
         </>
     );
 };

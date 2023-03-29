@@ -47,11 +47,8 @@ export interface IngredientApi {
 }
 
 export interface CocktailApi {
-    _id: string;
-    user: string;
-    name: string;
     image: string;
-    recipe: string;
     isPublished: boolean;
-    ingredients: IngredientApi[];
+    name: string;
+    _id: string;
 }

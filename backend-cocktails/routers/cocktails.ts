@@ -36,7 +36,7 @@ cocktailsRouter.get('/', async (req, res, next) => {
     const token = req.get('Authorization');
     try {
         if (!token) {
-            const cocktails = await Cocktail.find({isPublished: true});
+            const cocktails = await Cocktail.find({isPublished: true}).select(['image', 'name', 'isPublished']);
             if (!cocktails) {
                 return res.status(404).send({error: 'Cocktails are not found'});
             }
@@ -50,7 +50,7 @@ cocktailsRouter.get('/', async (req, res, next) => {
         }
 
         if (user.role === 'user') {
-            const cocktails = await Cocktail.find({user});
+            const cocktails = await Cocktail.find({user}).select(['image', 'name', 'isPublished']);
             if (!cocktails) {
                 return res.status(404).send({error: 'Cocktails are not found'});
             }
@@ -58,7 +58,7 @@ cocktailsRouter.get('/', async (req, res, next) => {
         }
 
         if (user.role === 'admin') {
-            const cocktails = await Cocktail.find();
+            const cocktails = await Cocktail.find().select(['image', 'name', 'isPublished']);
             if (!cocktails) {
                 return res.status(404).send({error: 'Cocktails are not found'});
             }

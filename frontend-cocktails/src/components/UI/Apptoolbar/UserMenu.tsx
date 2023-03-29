@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import {useNavigate} from 'react-router-dom';
+import {fetchCocktails} from '../../../features/cocktails/cocktailsThunks';
 import {logout} from '../../../features/users/usersThunks';
 import {useAppDispatch, useAppSelector} from '../../../app/hook';
 import {selectLogoutLoading} from '../../../features/users/usersSlice';
 import {apiURL} from '../../../constants';
 import {Avatar, Button, Grid, Menu, MenuItem} from '@mui/material';
 import {User} from '../../../types';
-import {useNavigate} from 'react-router-dom';
 
 interface Props {
     user: User;
@@ -28,6 +29,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
     const handleLogout = async () => {
         await dispatch(logout());
         await navigate('/');
+        await dispatch(fetchCocktails());
     };
 
     const handleMyCocktails = async () => {
