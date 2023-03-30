@@ -40,9 +40,12 @@ export interface ValidationError {
     _name: string;
 }
 
-export interface IngredientApi {
+export interface IngredientMutation {
     name: string;
     amount: string;
+}
+
+export interface IngredientApi extends IngredientMutation{
     _id: string;
 }
 
@@ -53,7 +56,15 @@ export interface CocktailApi {
     _id: string;
 }
 
-export interface CocktailId extends CocktailApi{
+export interface CocktailId extends CocktailApi {
     recipe: string;
     ingredients: IngredientApi[];
+}
+
+export interface CocktailMutation {
+    user: string;
+    name: string;
+    image: File | null;
+    recipe: string;
+    ingredients: IngredientMutation[];
 }

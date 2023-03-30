@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {useNavigate} from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
 import {fetchCocktails} from '../../../features/cocktails/cocktailsThunks';
 import {logout} from '../../../features/users/usersThunks';
 import {useAppDispatch, useAppSelector} from '../../../app/hook';
@@ -57,6 +57,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
+                <MenuItem component={NavLink} to='/addCocktail' disabled={loading}>Add cocktail</MenuItem>
                 <MenuItem onClick={handleMyCocktails} disabled={loading}>My cocktails</MenuItem>
                 <MenuItem onClick={handleLogout} disabled={loading}>Logout</MenuItem>
             </Menu>
