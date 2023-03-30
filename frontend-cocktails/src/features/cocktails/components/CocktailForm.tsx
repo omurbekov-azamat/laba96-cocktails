@@ -1,20 +1,28 @@
 import React, {useState} from 'react';
-import {Button, Grid, TextField, Typography} from '@mui/material';
-import {useAppSelector} from '../../../app/hook';
+import {useNavigate} from 'react-router-dom';
+import {selectCreateCocktailError, selectCreateCocktailLoading} from '../cocktailsSlice';
+import {useAppDispatch, useAppSelector} from '../../../app/hook';
+import {createCocktail} from '../cocktailsThunks';
 import {selectUser} from '../../users/usersSlice';
+import {Button, Grid, TextField, Typography} from '@mui/material';
 import FileInput from '../../../components/UI/FileInput/FileInput';
 import {LoadingButton} from '@mui/lab';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {CocktailMutation} from '../../../types';
 
 const CocktailForm = () => {
+    const dispatch = useAppDispatch();
     const user = useAppSelector(selectUser);
+    const loading = useAppSelector(selectCreateCocktailLoading);
+    const error = useAppSelector(selectCreateCocktailError);
+    const navigate = useNavigate();
+
     const [state, setState] = useState<CocktailMutation>({
         user: user ? user._id : '',
         name: '',
         image: null,
         recipe: '',
-        ingredients: [],
+        ingredients: [{name: '', amount: ''}],
     });
 
     const onAddIngredient = () => {
@@ -22,9 +30,11 @@ const CocktailForm = () => {
     };
 
     const onRemoveIngredient = (index: number) => {
-        const ingredients = [...state.ingredients];
-        ingredients.splice(index, 1);
-        setState(prev => ({...prev, ingredients}));
+        if (state.ingredients.length > 1) {
+            const ingredients = [...state.ingredients];
+            ingredients.splice(index, 1);
+            setState(prev => ({...prev, ingredients}));
+        }
     };
 
     const amountChangeHandler = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -61,7 +71,16 @@ const CocktailForm = () => {
 
     const submitFormHandler = async (event: React.FormEvent) => {
         event.preventDefault();
-        console.log(state);
+        await dispatch(createCocktail(state)).unwrap();
+        await navigate('/')
+    };
+
+    const getFieldError = (fieldName: string) => {
+        try {
+            return error?.errors[fieldName].message;
+        } catch {
+            return undefined;
+        }
     };
 
     return (
@@ -78,6 +97,9 @@ const CocktailForm = () => {
                         name='name'
                         value={state.name}
                         onChange={inputChangeHandler}
+                        error={Boolean(getFieldError('name'))}
+                        helperText={getFieldError('name')}
+                        required
                     />
                 </Grid>
                 <Grid item xs>
@@ -89,7 +111,10 @@ const CocktailForm = () => {
                                     id='name' label='Ingredient name'
                                     name='name'
                                     value={ingredient.name}
+                                    error={Boolean(getFieldError('ingredients.0.name'))}
+                                    helperText={getFieldError('ingredients.0.name')}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => ingredientNameChangeHandler(e, index)}
+                                    required
                                 />
                             </Grid>
                             <Grid item>
@@ -97,7 +122,10 @@ const CocktailForm = () => {
                                     id='amount' label='amount'
                                     name='amount'
                                     value={ingredient.amount}
+                                    error={Boolean(getFieldError('ingredients.0.amount'))}
+                                    helperText={getFieldError('ingredients.0.amount')}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => amountChangeHandler(e, index)}
+                                    required
                                 />
                             </Grid>
                             <Grid item>
@@ -112,6 +140,9 @@ const CocktailForm = () => {
                         name='recipe'
                         value={state.recipe}
                         onChange={inputChangeHandler}
+                        error={Boolean(getFieldError('recipe'))}
+                        helperText={getFieldError('recipe')}
+                        required
                     />
                 </Grid>
                 <Grid item xs>
@@ -120,6 +151,7 @@ const CocktailForm = () => {
                         name='image'
                         label='Image'
                         type='image/*'
+                        error={error}
                     />
                 </Grid>
                 <Grid item xs>
@@ -127,6 +159,7 @@ const CocktailForm = () => {
                         type='submit'
                         color='warning'
                         variant='outlined'
+                        loading={loading}
                     >
                         Create
                     </LoadingButton>

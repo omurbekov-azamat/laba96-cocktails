@@ -16,10 +16,10 @@ cocktailsRouter.post('/', auth, imagesUpload.single('image'), async (req, res, n
             user: req.body.user,
             name: req.body.name,
             image: req.file && req.file.filename,
-            recipe: req.body.recipe,
-            ingredients: req.body.ingredients,
+            recipe: req.body.recipe ,
+            ingredients: JSON.parse(req.body.ingredients),
         });
-        return res.send(cocktail);
+        return res.send({message: 'Created successfully', cocktail});
     } catch (e) {
         if (req.file) {
             await fs.unlink(req.file.path);

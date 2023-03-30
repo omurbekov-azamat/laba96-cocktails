@@ -31,8 +31,14 @@ const CocktailSchema = new Schema<ICocktail>({
     },
     ingredients: {
         type: [{
-            name: String,
-            amount: String,
+            name: {
+                type: String,
+                required: true,
+            },
+            amount: {
+                type: String,
+                required: true,
+            },
         }],
         required: true,
     }
