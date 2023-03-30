@@ -1,10 +1,12 @@
 import React from 'react';
 import {NavLink} from "react-router-dom";
-import {Card, CardActionArea, CardContent, CardMedia, Grid, Typography} from '@mui/material';
-import {apiURL} from '../../../constants';
-import {LoadingButton} from '@mui/lab';
-import {useAppSelector} from '../../../app/hook';
+import {Box, Card, CardActionArea, CardContent, CardMedia, Grid, Typography} from '@mui/material';
+import {deleteCocktail, publishCocktail} from '../cocktailsThunks';
+import {useAppDispatch, useAppSelector} from '../../../app/hook';
 import {selectUser} from '../../users/usersSlice';
+import {LoadingButton} from '@mui/lab';
+import {apiURL} from '../../../constants';
+import {selectDeleteCocktailLoading, selectPublishCocktailLoading} from '../cocktailsSlice';
 import {CocktailApi} from '../../../types';
 
 interface Props {
@@ -12,7 +14,18 @@ interface Props {
 }
 
 const CocktailItem: React.FC<Props> = ({item}) => {
+    const dispatch = useAppDispatch();
     const user = useAppSelector(selectUser);
+    const deleteLoading = useAppSelector(selectDeleteCocktailLoading);
+    const publishLoading = useAppSelector(selectPublishCocktailLoading);
+
+    const onDeleteCocktail = async (id: string) => {
+        await dispatch(deleteCocktail(id));
+    };
+
+    const onPublishCocktail = async (id: string) => {
+        await dispatch(publishCocktail(id));
+    };
 
     return (
         <Grid item>
@@ -27,7 +40,7 @@ const CocktailItem: React.FC<Props> = ({item}) => {
                     <CardContent>
                         <Grid container direction='column'>
                             <Grid item>
-                                <Typography variant='h6' component='div'>
+                                <Typography variant='h6' component='div' textTransform='capitalize'>
                                     Name: {item.name}
                                 </Typography>
                             </Grid>
@@ -46,6 +59,9 @@ const CocktailItem: React.FC<Props> = ({item}) => {
                                 <LoadingButton
                                     type='button'
                                     color='error'
+                                    onClick={() => onDeleteCocktail(item._id)}
+                                    loading={deleteLoading ? deleteLoading === item._id : false}
+                                    disabled={publishLoading ? publishLoading === item._id : false}
                                 >
                                     delete
                                 </LoadingButton>
@@ -54,11 +70,27 @@ const CocktailItem: React.FC<Props> = ({item}) => {
                                 <LoadingButton
                                     type='button'
                                     color='primary'
+                                    onClick={() => onPublishCocktail(item._id)}
+                                    loading={publishLoading ? publishLoading === item._id : false}
+                                    disabled={deleteLoading ? deleteLoading === item._id : false}
                                 >
-                                    Publish
+                                    publish
                                 </LoadingButton>
                             </Grid>
                         </Grid>
+                    }
+                    {user && user.role === 'admin' && item.isPublished &&
+                        <Box textAlign='center' sx={{mt: 3}}>
+                            <LoadingButton
+                                type='button'
+                                color='error'
+                                onClick={() => onDeleteCocktail(item._id)}
+                                loading={deleteLoading ? deleteLoading === item._id : false}
+                                disabled={publishLoading ? publishLoading === item._id : false}
+                            >
+                                delete
+                            </LoadingButton>
+                        </Box>
                     }
                 </Grid>
             </Card>

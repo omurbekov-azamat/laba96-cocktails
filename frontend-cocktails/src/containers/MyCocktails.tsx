@@ -1,9 +1,14 @@
 import React, {useEffect} from 'react';
+import {fetchMyCocktails} from '../features/cocktails/cocktailsThunks';
+import {selectUser} from '../features/users/usersSlice';
 import {Typography} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../app/hook';
-import {selectMyCocktails, selectMyCocktailsFetching} from '../features/cocktails/cocktailsSlice';
-import {selectUser} from '../features/users/usersSlice';
-import {fetchMyCocktails} from '../features/cocktails/cocktailsThunks';
+import {
+    selectDeleteCocktailLoading,
+    selectMyCocktails,
+    selectMyCocktailsFetching,
+    selectPublishCocktailLoading
+} from '../features/cocktails/cocktailsSlice';
 import CocktailItems from '../features/cocktails/components/CocktailItems';
 import Spinner from '../components/UI/Spinner/Spinner';
 
@@ -12,12 +17,14 @@ const MyCocktails = () => {
     const user = useAppSelector(selectUser);
     const cocktails = useAppSelector(selectMyCocktails);
     const loading = useAppSelector(selectMyCocktailsFetching);
+    const onDelete = useAppSelector(selectDeleteCocktailLoading);
+    const onPublish = useAppSelector(selectPublishCocktailLoading);
 
     useEffect(() => {
         if (user) {
             dispatch(fetchMyCocktails(user._id));
         }
-    },[dispatch, user]);
+    }, [dispatch, user, onDelete, onPublish]);
 
 
     return (

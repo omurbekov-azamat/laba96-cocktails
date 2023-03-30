@@ -37,3 +37,27 @@ export const fetchMyCocktails = createAsyncThunk<CocktailApi[], string>(
         }
     }
 );
+
+export const deleteCocktail = createAsyncThunk<void, string>(
+    'cocktails/deleteCocktail',
+    async (id, {dispatch}) => {
+        try {
+            await axiosApi.delete('/cocktails/' + id);
+            await dispatch(fetchCocktails());
+        } catch (e) {
+            throw e;
+        }
+    }
+);
+
+export const publishCocktail = createAsyncThunk<void, string>(
+    'cocktails/publishCocktail',
+    async (id, {dispatch}) => {
+        try {
+            await axiosApi.patch('/cocktails/' + id + '/togglePublished');
+            await dispatch(fetchCocktails());
+        } catch (e) {
+            throw e;
+        }
+    }
+);
