@@ -8,6 +8,7 @@ import {Button, Grid, TextField, Typography} from '@mui/material';
 import FileInput from '../../../components/UI/FileInput/FileInput';
 import {LoadingButton} from '@mui/lab';
 import DeleteIcon from '@mui/icons-material/Delete';
+import {enqueueSnackbar, SnackbarProvider} from 'notistack';
 import {CocktailMutation} from '../../../types';
 
 const CocktailForm = () => {
@@ -69,10 +70,22 @@ const CocktailForm = () => {
         setState(prev => ({...prev, [name]: value}));
     };
 
+    const moveToMyCocktails = () => {
+        navigate('/my-cocktails');
+    };
+
     const submitFormHandler = async (event: React.FormEvent) => {
         event.preventDefault();
         await dispatch(createCocktail(state)).unwrap();
-        await navigate('/')
+        setState({
+            user: user ? user._id : '',
+            name: '',
+            image: null,
+            recipe: '',
+            ingredients: [{name: '', amount: ''}],
+        });
+        await enqueueSnackbar('You have created cocktail successfully', {variant: 'success'});
+        setTimeout(moveToMyCocktails, 2000);
     };
 
     const getFieldError = (fieldName: string) => {
@@ -85,6 +98,7 @@ const CocktailForm = () => {
 
     return (
         <form onSubmit={submitFormHandler}>
+            <SnackbarProvider/>
             <Grid container direction='column' spacing={2}>
                 <Grid item xs>
                     <Typography variant='h5'>
