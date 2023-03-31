@@ -1,11 +1,12 @@
 import express from 'express';
-import {imagesUpload} from '../multer';
 import {promises as fs} from "fs";
 import {Error} from "mongoose";
 import crypto from "crypto";
-import User from '../modules/User';
 import {OAuth2Client} from 'google-auth-library';
+import {imagesUpload} from '../multer';
+import User from '../modules/User';
 import config from '../config';
+import {downloadFile} from '../helpers';
 
 const usersRouter = express.Router();
 const client = new OAuth2Client(config.google.clientId);
@@ -76,13 +77,17 @@ usersRouter.post('/google', async (req, res, next) => {
 
         let user = await User.findOne({googleId});
 
+        const photoName = 'images/' + crypto.randomUUID() + '.jpg';
+
+        await downloadFile(avatar!, photoName);
+
         if (!user) {
             user = new User({
                 email,
                 password: crypto.randomUUID(),
                 displayName,
                 googleId,
-                avatar,
+                avatar: photoName,
             });
         }
 
