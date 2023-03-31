@@ -42,6 +42,9 @@ const run = async () => {
             {name: 'coconut cream', amount: '60ml'},
             {name: 'wedge of pineapple, to garnish ', amount: '1 piece'},
         ],
+        rate: [
+            {user_id: user._id, grade: 5},
+        ],
     }, {
         user: user._id,
         name: 'Long island iced tea',
@@ -59,6 +62,9 @@ const run = async () => {
             {name: 'Garnish: lemon wedge', amount: '1 piece'},
         ],
         isPublished: true,
+        rate: [
+            {user_id: user._id, grade: 5},
+        ],
     }, {
         user: admin._id,
         name: 'cosmopolitan',

@@ -41,7 +41,26 @@ const CocktailSchema = new Schema<ICocktail>({
             },
         }],
         required: true,
-    }
+    },
+    rate: {
+        type: [{
+            user_id: {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+                required: true,
+                validate: {
+                    validator: async (value: Types.ObjectId) => User.findById(value),
+                    message: 'User does not exist',
+                },
+            },
+            grade: {
+                type: Number,
+                required: true,
+                min: 1,
+                max: 5,
+            },
+        }],
+    },
 });
 
 const Cocktail = model<ICocktail>('Cocktail', CocktailSchema);

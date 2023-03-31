@@ -14,7 +14,7 @@ const Cocktail = () => {
 
     useEffect(() => {
         dispatch(fetchOneCocktail(id));
-    }, [dispatch]);
+    }, [dispatch, id]);
 
     return (
         <>

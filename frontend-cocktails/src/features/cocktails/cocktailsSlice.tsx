@@ -5,7 +5,7 @@ import {
     fetchCocktails,
     fetchMyCocktails,
     fetchOneCocktail,
-    publishCocktail
+    publishCocktail, rateCocktail
 } from './cocktailsThunks';
 import {RootState} from '../../app/store';
 import {CocktailApi, CocktailId, ValidationError} from '../../types';
@@ -21,6 +21,7 @@ interface CocktailsState {
     publishCocktailLoading: string | false;
     createCocktailError: ValidationError | null;
     createCocktailLoading: boolean;
+    sendRatingLoading: boolean;
 }
 
 const initialState: CocktailsState = {
@@ -34,6 +35,7 @@ const initialState: CocktailsState = {
     publishCocktailLoading: false,
     createCocktailError: null,
     createCocktailLoading: false,
+    sendRatingLoading: false,
 }
 
 export const cocktailsSlice = createSlice({
@@ -103,6 +105,15 @@ export const cocktailsSlice = createSlice({
             state.createCocktailLoading = false;
             state.createCocktailError = error || null;
         });
+        builder.addCase(rateCocktail.pending, (state) => {
+            state.sendRatingLoading = true;
+        });
+        builder.addCase(rateCocktail.fulfilled, (state) => {
+            state.sendRatingLoading = false;
+        });
+        builder.addCase(rateCocktail.rejected, (state) => {
+            state.sendRatingLoading = false;
+        });
     },
 });
 
@@ -117,3 +128,4 @@ export const selectDeleteCocktailLoading = (state: RootState) => state.cocktails
 export const selectPublishCocktailLoading = (state: RootState) => state.cocktails.publishCocktailLoading;
 export const selectCreateCocktailError = (state: RootState) => state.cocktails.createCocktailError;
 export const selectCreateCocktailLoading = (state: RootState) => state.cocktails.createCocktailLoading;
+export const selectSendRatingLoading = (state: RootState) => state.cocktails.sendRatingLoading;

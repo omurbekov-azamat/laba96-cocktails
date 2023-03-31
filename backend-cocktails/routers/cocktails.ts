@@ -1,7 +1,7 @@
 import {promises as fs} from 'fs';
 import mongoose, {HydratedDocument} from 'mongoose';
 import express from 'express';
-import auth from '../middleware/auth';
+import auth, {RequestWithUser} from '../middleware/auth';
 import permit from '../middleware/permit';
 import {imagesUpload} from '../multer';
 import Cocktail from '../modules/Cocktail';
@@ -16,7 +16,7 @@ cocktailsRouter.post('/', auth, imagesUpload.single('image'), async (req, res, n
             user: req.body.user,
             name: req.body.name,
             image: req.file && req.file.filename,
-            recipe: req.body.recipe ,
+            recipe: req.body.recipe,
             ingredients: JSON.parse(req.body.ingredients),
         });
         return res.send({message: 'Created successfully', cocktail});
@@ -158,6 +158,35 @@ cocktailsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req,
     try {
         await cocktail.save();
         return res.send({message: 'isPublished successfully changed!', cocktail});
+    } catch (e) {
+        return next(e);
+    }
+});
+
+cocktailsRouter.patch('/:id/toggleRating', auth, async (req, res, next) => {
+    const user = (req as RequestWithUser).user;
+    const cocktailId = req.params.id;
+    const newGrade = req.body.grade;
+    const userId = user._id;
+    try {
+        const foundCocktail = await Cocktail.findOne({
+            _id: req.params.id,
+            'rate.user_id': user._id,
+        });
+
+        if (!foundCocktail) {
+            await Cocktail.findOneAndUpdate(
+                {_id: cocktailId},
+                {$push: {rate: {user_id: userId, grade: newGrade}}},
+            );
+            return res.send({message: 'you have send your rating!'});
+        } else {
+            await Cocktail.findOneAndUpdate(
+                {_id: cocktailId, 'rate.user_id': userId},
+                {$set: {'rate.$.grade': newGrade}},
+            );
+            return res.send({message: 'you have edit your rating, success!'});
+        }
     } catch (e) {
         return next(e);
     }

@@ -29,7 +29,7 @@ const CocktailItem: React.FC<Props> = ({item}) => {
 
     return (
         <Grid item>
-            <Card sx={{width: 300, height: 420}}>
+            <Card sx={{width: 300, height: 450}}>
                 <CardActionArea component={NavLink} to={'/cocktails/' + item._id}>
                     <CardMedia
                         component="img"

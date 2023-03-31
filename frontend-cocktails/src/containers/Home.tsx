@@ -1,11 +1,12 @@
 import React from 'react';
 import {Outlet} from "react-router-dom";
-import {Container} from "@mui/material";
+import {Container, CssBaseline} from "@mui/material";
 import AppToolbar from '../components/UI/Apptoolbar/Apptolbar';
 
 const Home = () => {
     return (
         <>
+            <CssBaseline/>
             <AppToolbar/>
             <Container maxWidth="lg">
                 <Outlet/>

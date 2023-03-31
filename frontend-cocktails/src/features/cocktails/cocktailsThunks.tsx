@@ -82,3 +82,20 @@ export const createCocktail = createAsyncThunk<void, CocktailMutation, { rejectV
         }
     }
 );
+
+export interface RateProps {
+    cocktailId: string;
+    grade: number;
+}
+
+export const rateCocktail = createAsyncThunk<void, RateProps>(
+    'cocktails/rateCocktail',
+    async (data, {dispatch}) => {
+        try {
+            await axiosApi.patch('/cocktails/' + data.cocktailId + '/toggleRating', {grade: data.grade});
+            await dispatch(fetchOneCocktail(data.cocktailId));
+        } catch (e) {
+            throw e;
+        }
+    }
+);

@@ -15,6 +15,11 @@ export interface Ingredient {
     amount: string;
 }
 
+export interface Rating {
+    user_id: string;
+    grade: number;
+}
+
 export interface ICocktail {
     user: ObjectId;
     name: string;
@@ -22,4 +27,5 @@ export interface ICocktail {
     recipe: string;
     isPublished: boolean;
     ingredients: Ingredient[];
+    rate: Rating[];
 }

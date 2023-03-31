@@ -56,9 +56,16 @@ export interface CocktailApi {
     _id: string;
 }
 
+export interface Rating {
+    user_id: string;
+    grade: number;
+    _id: string;
+}
+
 export interface CocktailId extends CocktailApi {
     recipe: string;
     ingredients: IngredientApi[];
+    rate: Rating[];
 }
 
 export interface CocktailMutation {
