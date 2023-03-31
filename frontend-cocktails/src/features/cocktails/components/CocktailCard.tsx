@@ -44,7 +44,7 @@ const CocktailCard: React.FC<Props> = ({item}) => {
                 <Grid item xs>
                     <CardMedia
                         component="img"
-                        height='auto'
+                        height='500px'
                         image={apiURL + '/' + item.image}
                         alt={item.name}
                     />

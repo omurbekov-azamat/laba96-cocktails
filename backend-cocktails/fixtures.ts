@@ -17,13 +17,13 @@ const run = async () => {
     }
 
     const [user, admin] = await User.create({
-        email: 'user',
+        email: 'user@gmail.com',
         password: '123',
         displayName: 'user',
         avatar: 'fixtures/anonymous.jpg',
         token: crypto.randomUUID(),
     }, {
-        email: 'admin',
+        email: 'admin@gmail.com',
         password: '123',
         displayName: 'admin',
         avatar: 'fixtures/anonymous.jpg',

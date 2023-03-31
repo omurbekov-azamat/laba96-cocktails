@@ -72,6 +72,7 @@ const Register = () => {
                         <Grid item xs={12}>
                             <TextField
                                 label="Email"
+                                type='email'
                                 name="email"
                                 autoComplete="new-email"
                                 value={state.email}

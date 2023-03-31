@@ -84,7 +84,7 @@ const CocktailForm = () => {
             recipe: '',
             ingredients: [{name: '', amount: ''}],
         });
-        await enqueueSnackbar('You have created cocktail successfully', {variant: 'success'});
+        await enqueueSnackbar('Your cocktail is under moderation', {variant: 'success'});
         setTimeout(moveToMyCocktails, 2000);
     };
 
