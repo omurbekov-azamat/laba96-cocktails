@@ -170,8 +170,8 @@ cocktailsRouter.patch('/:id/toggleRating', auth, async (req, res, next) => {
     const userId = user._id;
     try {
         const foundCocktail = await Cocktail.findOne({
-            _id: req.params.id,
-            'rate.user_id': user._id,
+            _id: cocktailId,
+            'rate.user_id': userId,
         });
 
         if (!foundCocktail) {
